@@ -9,16 +9,21 @@ AniBot is an AI-powered chatbot designed to recommend anime movies and TV shows 
 The project is organized into two main directories:
 
 - `backend/`: Contains the FastAPI application, database interactions, and AI/ML models.
-- `frontend/`: Will contain the React.js frontend application (to be implemented).
+- `frontend/`: Contains the React.js frontend application.
 
-## Features (Planned)
+## Features
 
+### Implemented
+- Basic chatbot functionality
+- Genre-based anime recommendations
+- Integration with Jikan API for anime data
+
+### Planned
 - Personalized anime recommendations
-- Genre-based filtering
 - Mood-based suggestions
 - Timeline-specific recommendations
 - User preference learning
-- Conversational interface
+- Enhanced conversational interface
 
 ## Tech Stack
 
@@ -26,14 +31,14 @@ The project is organized into two main directories:
 - Language: Python 3.9+
 - Web Framework: FastAPI
 - Database: MongoDB
-- AI/ML: TensorFlow
+- AI/ML: TensorFlow (planned)
 - NLP: spaCy
 - ODM: Motor (asynchronous MongoDB driver)
 
-### Frontend (Planned)
+### Frontend
 - Framework: React.js
-- State Management: Redux (tentative)
-- UI Library: Material-UI or Chakra UI (to be decided)
+- State Management: React Hooks
+- UI Library: Material-UI
 
 ## Setup
 
@@ -64,51 +69,41 @@ The project is organized into two main directories:
    uvicorn app.main:app --reload
    ```
 
-5. Open your browser and navigate to `http://localhost:8000` to see the API documentation.
+5. Set up the frontend:
+   ```
+   cd ../frontend/anibot-react
+   npm install
+   ```
 
-## Backend Structure
+6. Run the frontend application:
+   ```
+   npm start
+   ```
 
-```
-backend/
-├── app/
-│   ├── __init__.py
-│   ├── main.py
-│   ├── database.py
-│   ├── models.py
-│   ├── routers/
-│   │   ├── __init__.py
-│   │   └── anime.py
-│   └── services/
-│       ├── __init__.py
-│       ├── recommendation.py
-│       └── nlp.py
-├── .env
-├── requirements.txt
-└── README.md
-```
+7. Open your browser and navigate to `http://localhost:3000` to use the application.
 
 ## API Endpoints
 
-- `POST /anime/`: Create a new anime entry
-- `GET /anime/{anime_id}`: Retrieve details of a specific anime
+- `POST /api/v1/chat/`: Send a message to the chatbot
+- `POST /api/v1/anime/`: Create a new anime entry
+- `GET /api/v1/anime/{anime_id}`: Retrieve details of a specific anime
 
 More endpoints will be added as the project develops.
 
 ## Development Roadmap
 
-1. Implement core recommendation logic
+1. Enhance recommendation logic
 2. Expand NLP capabilities for better understanding of user queries
 3. Develop data ingestion scripts for populating the database
 4. Implement user authentication and personalization features
-5. Begin frontend development with React.js
-6. Integrate frontend and backend
-7. Implement conversational UI
-8. Conduct thorough testing and refinement
-9. Deploy MVP (Minimum Viable Product)
+5. Improve frontend UI/UX
+6. Implement advanced conversational UI features
+7. Conduct thorough testing and refinement
+8. Deploy MVP (Minimum Viable Product)
 
 ## Contributing
 
-This project is currently in its early stages. Contributions, ideas, and feedback are welcome! Please feel free to open an issue or submit a pull request.
+This project is currently in its alpha stage. Contributions, ideas, and feedback are welcome! Please feel free to open an issue or submit a pull request.
 
 ## License
 
