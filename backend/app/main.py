@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from app.database import init_db
+from app.database import init_db, close_db
 from app.routers import anime_router, users_router, ratings_router, recommendations_router, chat_router
 from app.services import ChatbotService, NLPService
 from app.models.user import User
@@ -23,6 +23,10 @@ chatbot_service = ChatbotService()
 @app.on_event("startup")
 async def startup_db_client():
     await init_db()
+
+@app.on_event("shutdown")
+async def shutdown_db_client():
+    await close_db()
 
 app.include_router(anime_router, prefix="/api/v1")
 app.include_router(users_router, prefix="/api/v1")

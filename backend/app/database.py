@@ -16,3 +16,6 @@ async def init_db():
 
 async def close_db():
     db.client.close()
+
+async def get_db():
+    return db.database

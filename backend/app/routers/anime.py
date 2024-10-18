@@ -1,33 +1,34 @@
 from fastapi import APIRouter, HTTPException, Depends
 from app.models import Anime, AnimeCreate, AnimeUpdate, User
-from app.database import db
+from app.database import get_db
 from app.auth import get_current_user
 from bson import ObjectId
 from typing import List
+from motor.motor_asyncio import AsyncIOMotorDatabase
 
 router = APIRouter()
 
 @router.post("/anime/", response_model=Anime)
-async def create_anime(anime: AnimeCreate, current_user: User = Depends(get_current_user)):
-    new_anime = await db.database["animes"].insert_one(anime.dict())
-    created_anime = await db.database["animes"].find_one({"_id": new_anime.inserted_id})
+async def create_anime(anime: AnimeCreate, db: AsyncIOMotorDatabase = Depends(get_db), current_user: User = Depends(get_current_user)):
+    new_anime = await db["animes"].insert_one(anime.dict())
+    created_anime = await db["animes"].find_one({"_id": new_anime.inserted_id})
     return Anime(**created_anime)
 
 @router.get("/anime/{anime_id}", response_model=Anime)
-async def read_anime(anime_id: str):
-    anime = await db.database["animes"].find_one({"_id": ObjectId(anime_id)})
+async def read_anime(anime_id: str, db: AsyncIOMotorDatabase = Depends(get_db)):
+    anime = await db["animes"].find_one({"_id": ObjectId(anime_id)})
     if anime is None:
         raise HTTPException(status_code=404, detail="Anime not found")
     return Anime(**anime)
 
 @router.get("/anime/", response_model=List[Anime])
-async def list_animes(skip: int = 0, limit: int = 10):
-    animes = await db.database["animes"].find().skip(skip).limit(limit).to_list(limit)
+async def list_animes(skip: int = 0, limit: int = 10, db: AsyncIOMotorDatabase = Depends(get_db)):
+    animes = await db["animes"].find().skip(skip).limit(limit).to_list(limit)
     return [Anime(**anime) for anime in animes]
 
 @router.put("/anime/{anime_id}", response_model=Anime)
-async def update_anime(anime_id: str, anime_update: AnimeUpdate, current_user: User = Depends(get_current_user)):
-    updated_anime = await db.database["animes"].find_one_and_update(
+async def update_anime(anime_id: str, anime_update: AnimeUpdate, db: AsyncIOMotorDatabase = Depends(get_db), current_user: User = Depends(get_current_user)):
+    updated_anime = await db["animes"].find_one_and_update(
         {"_id": ObjectId(anime_id)},
         {"$set": anime_update.dict(exclude_unset=True)},
         return_document=True

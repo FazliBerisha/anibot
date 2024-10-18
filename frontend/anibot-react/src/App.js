@@ -105,19 +105,12 @@ const StyledIconButton = styled(IconButton)`
   }
 `;
 
-function App() {
+function useChatbot() {
   const [messages, setMessages] = useState([
     { sender: 'AniBot', text: 'Hello! I\'m AniBot, your anime companion. How can I help you today?' }
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const chatContainerRef = useRef(null);
-
-  useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-    }
-  }, [messages]);
 
   const addMessage = (sender, text) => {
     setMessages(prev => [...prev, { sender, text }]);
@@ -140,6 +133,19 @@ function App() {
       }
     }
   };
+
+  return { messages, input, isTyping, setInput, handleSend };
+}
+
+function App() {
+  const { messages, input, isTyping, setInput, handleSend } = useChatbot();
+  const chatContainerRef = useRef(null);
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   return (
     <ThemeProvider theme={theme}>
